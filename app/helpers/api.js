@@ -1,7 +1,7 @@
 import { ref } from 'config/constants'
 
 function saveToPosts (post) {
-  const postId = ref.child('posts').push().key()
+  const postId = ref.child('posts').push().key
   const postPromise = ref.child(`posts/${postId}`).set({...post, postId})
   return {
     postId,
@@ -80,7 +80,7 @@ export function fetchLikeCount (postId) {
 }
 
 export function postReply (postId, reply) {
-  const replyId = ref.child(`replies/${postId}`).push().key()
+  const replyId = ref.child(`replies/${postId}`).push().key
   const replyWithId = {...reply, replyId}
   const replyPromise = ref.child(`replies/${postId}/${replyId}`).set(replyWithId)
 

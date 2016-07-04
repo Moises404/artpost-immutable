@@ -1,18 +1,19 @@
 import Firebase from 'firebase'
 
-// const config = {
-//   apiKey: '2vJesEakD4dskwdTrfWNnyLIu3Q9h57ud5AoK5Xn',
-//   authDomain: 'artpost-db.firebaseapp.com',
-//   databaseURL: 'https://artpost-db.firebaseio.com'
-// }
+const config = {
+  apiKey: 'AIzaSyDvkX1iLVpO7xE2tsPjiwqSiFi8MAlQeag',
+  authDomain: 'artpost-db.firebaseapp.com',
+  databaseURL: 'https://artpost-db.firebaseio.com',
+  storageBucket: 'artpost-db.appspot.com'
+}
 
-// firebase.initializeApp(config)
+firebase.initializeApp(config)
 
-// export const ref = firebase.database().ref()
-// export const firebaseAuth = firebase.auth
+export const ref = firebase.database().ref()
+export const firebaseAuth = firebase.auth
 
-const firebaseUrl = 'https://artpost-db.firebaseio.com/'
-export const ref = new Firebase(firebaseUrl)
+// const firebaseUrl = 'https://artpost-db.firebaseio.com/'
+// export const ref = new Firebase(firebaseUrl)
 
 export const userPostsExperationLength = 100000
 export const userExpirationLength = 100000

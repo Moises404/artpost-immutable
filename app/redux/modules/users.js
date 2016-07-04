@@ -7,6 +7,7 @@ const UNAUTH_USER = 'UNAUTH_USER'
 const FETCHING_USER = 'FETCHING_USER'
 const FETCHING_USER_FAILURE = 'FETCHING_USER_FAILURE'
 const FETCHING_USER_SUCCESS = 'FETCHING_USER_SUCCESS'
+const REMOVE_FETCHING_USER = 'REMOVE_FETCHING_USER'
 
 
 ////////////////////
@@ -49,13 +50,20 @@ export function fetchingUserSuccess (uid, user, timestamp) {
   }
 }
 
+export function removeFetchingUser () {
+  return {
+    type: REMOVE_FETCHING_USER
+  }
+}
+
 export function fetchAndHandleAuthedUser () {
   return function (dispatch) {
     dispatch(fetchingUser())
     return auth()
-      .then(({uid, facebook}) => {
-        const userInfo = formatUserInfo(facebook.displayName, facebook.profileImageURL, uid)
-        return dispatch(fetchingUserSuccess(uid, userInfo, Date.now()))
+      .then(({user, credential}) => {
+        const userData = user.providerData[0]
+        const userInfo = formatUserInfo(userData.displayName, userData.photoURL, user.uid)
+        return dispatch(fetchingUserSuccess(user.uid, userInfo, Date.now()))
       })
       .then(({user}) => saveUser(user))
       .then((user) => dispatch(authUser(user.uid)))
@@ -103,7 +111,7 @@ function user (state = initialUserState, action) {
       return {
         ...state,
         info: action.user,
-        lastUpdated: action.timestamp,
+        lastUpdated: action.timestamp
       }
     default :
       return state
@@ -115,7 +123,7 @@ function user (state = initialUserState, action) {
 /////////////////////
 
 const initialState = {
-  isFetching: false,
+  isFetching: true,
   error: '',
   isAuthed: false,
   authedId: '',
@@ -135,18 +143,23 @@ export default function users (state = initialState, action) {
         isAuthed: false,
         authedId: '',
       }
-    case FETCHING_USER:
+    case FETCHING_USER :
       return {
         ...state,
         isFetching: true,
       }
-    case FETCHING_USER_FAILURE:
+    case FETCHING_USER_FAILURE :
       return {
         ...state,
         isFetching: false,
         error: action.error,
       }
-    case FETCHING_USER_SUCCESS:
+    case REMOVE_FETCHING_USER :
+      return {
+        ...state,
+        isFetching: false
+      }
+    case FETCHING_USER_SUCCESS :
       return action.user === null
         ? {
           ...state,
